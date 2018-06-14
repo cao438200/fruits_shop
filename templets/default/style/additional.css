@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+html {
+    background-color: #ebebeb;
+}
+body{
+	margin:0;
+	    font-family: "微软雅黑",Helvetica Neue,Helvetica,STHeiTi,\5fae\8f6f\96c5\9ed1,sans-serif;
+}
+#testFrame{
+	width: 100%;
+	/*padding: 20px;*/
+    line-height: 28px;
+	margin: 0 auto;
+    font-size: 14px;
+    background-color: #f8f8f8;
+	max-width: 720px;
+}
+.top_nav{ position:fixed; top:0;}

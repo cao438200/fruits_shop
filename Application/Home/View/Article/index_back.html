@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://www.yidianzixun.com/article/0HjNc6px?s= -->
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="keywords" content="一点资讯，新闻资讯，热点资讯，本地新闻，应用，头条，热点，科技，娱乐，健康，时尚，家居，教育，旅行，两性，美食，星座，阅读，个性化新闻" />
+  <meta name="description" content="" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, minimal-ui" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-touch-fullscreen" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no" />
+
+
+  <link rel="stylesheet" href="__PUBLIC__/css/article.css" type="text/css" />
+
+  <style type="text/css">
+   img{
+    width: 100%;
+    height: auto;
+   }
+   video{
+    width: 100%;
+    height: auto;
+   }
+   iframe{
+    width: 100%;
+    height: auto;
+   }
+  </style>
+
+  <title>{$art.title}</title>
+ </head>
+ <body class="s-yidian style-0 page-news hasbanner" style="padding-bottom: 0.5rem;">
+
+
+
+
+  <div class="container collapse">
+   <h3>{$art.title}</h3>
+   <div class="meta js-meta">
+    <div class="date">
+     {$art.time}
+    </div>
+    <div class="source">
+     {$art.writer}
+    </div>
+   </div>
+   <article id="js-article">
+    <div id="js-content" class="content">
+    <p></p>
+    {:htmlspecialchars_decode($art['content'])} 
+    </div>
+   </article>
+
+  </div>
+
+
+ </body>
+</html>
