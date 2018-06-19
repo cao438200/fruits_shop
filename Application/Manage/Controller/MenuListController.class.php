@@ -47,8 +47,7 @@ class MenuListController extends Controller {
     public function add(){
     	$name=I('post.name');
     	$content=I('post.content');
-    	date_default_timezone_set('PRC');
-		$time=date('y-m-d h:i:s',time());
+		$time=date('Y-m-d H:i:s');
 		$menu_cl=I('post.menu_cl');
 		
 		$data=array(

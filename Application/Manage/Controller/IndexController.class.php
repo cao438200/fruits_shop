@@ -6,6 +6,11 @@ header('content-type:text/html;charset=utf-8;');
 class IndexController extends Controller {
     public function index(){
         $this->display();
+        $op=I('get.op');
+        if($op){
+            unset ($_SESSION['administrator']);
+
+        }
     }
 
     public function CheckLogin(){

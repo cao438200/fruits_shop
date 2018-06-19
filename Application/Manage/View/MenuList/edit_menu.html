@@ -42,10 +42,14 @@
      </li> 
   </ul>
   <input type="hidden" name="edit_id" value="{$menu.Id}">
-  <div class="Button_operation btn_width">
-    <button class="btn button_btn bg-deep-blue" type="submit">修改菜谱</button>
-    <button class="btn button_btn bg-gray" type="button">取消修改</button>
- </div>
+   <li class="clearfix">
+      <div class="col-xs-2 col-lg-2">&nbsp;</div>
+      <div class="col-xs-6">
+    <button class="btn button_btn bg-deep-blue " type="submit" value="">提交菜谱</button>
+      <!-- <input name="reset" type="reset" class="btn button_btn btn-gray" value="取消重置" /> -->
+      <a href="javascript:ovid()" onclick="javascript :history.back(-1);" class="btn btn-info button_btn"><i class="fa fa-reply"></i> 返回上一步</a>
+      </div>
+    </li>
  </form>
   </div>
 </div>

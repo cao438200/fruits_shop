@@ -68,7 +68,7 @@ class AdministratorListController extends Controller {
     		'password'=>md5($password),
     		'name'=>$name,
     		'status'=>1,
-    		'createtime'=>date('y-m-d h:i:s',time()),
+    		'createtime'=>date('Y-m-d H:i:s'),
     	];
     	$bool=$art->add($data); 
 	   	if($bool){

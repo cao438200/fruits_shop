@@ -17,7 +17,6 @@ class MemberListController extends Controller {
 	    		}
 	    	}elseif($start && $end){
 	    		$map['_string'] = "createtime between $start AND '$end 23:59:59' ";
-	    		// $map['ceratetime'] = array(array('gt',$start),array('lt',"$end 23:59:59"));
 	    	}
 	    	$count=M('member')->where($map)->count();
 			$p = getpage($count,2);

@@ -9,6 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 namespace Think;
+date_default_timezone_set('Asia/Shanghai');
 /**
  * ThinkPHP 控制器基类 抽象类
  */
@@ -40,6 +41,47 @@ abstract class Controller {
         if(method_exists($this,'_initialize'))
             $this->_initialize();
     }
+    //获取两个时间的天数差
+    function getDays ($day1, $day2){
+      $second1 = strtotime($day1);
+      $second2 = strtotime($day2); 
+      if ($second1 < $second2) {
+        $tmp = $second2;
+        $second2 = $second1;
+        $second1 = $tmp;
+      }
+      return ($second1 - $second2) / 86400;
+    }
+    //调用接口方法
+    public  function get_port($url,$data=''){
+        // $url="http://211.149.155.236:90/order.asmx/ABC_Login";
+        $data=http_build_query($data);
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POST, 1);
+        if($data){
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }else{
+            curl_setopt($curl, CURLOPT_POSTFIELDS);
+        }
+        $result = curl_exec($curl);
+        curl_close($curl);
+        $result=json_decode($result,true);
+        return $result;
+    }
+    // public function get_logion_status(){
+    //     //登陆接口
+    //     $url="http://211.149.155.236:90/order.asmx/ABC_Login";
+    //     $data=array(
+    //         'sUserID'=>'admin',
+    //         'sPassword'=>'123456',
+    //         'sExportType'=>'JSON',
+    //         'sCharsetName'=>'UTF-8',
+    //     );
+    //     return $this->get_port($url,$data);
+    // }
 
     /**
      * 模板显示 调用内置的模板引擎显示方法，

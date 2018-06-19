@@ -3,41 +3,72 @@
 	use Think\Controller;
 	class StoresListController extends Controller {
 		public function index(){
-			$url = "http://124.225.146.25:3003/crm.asmx/Get_ShpList";
-			$ch  = curl_init($url);
-			curl_setopt($curl, CURLOPT_HEADER, false);
-    		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  //返回数据不直接输出
-    		curl_setopt($curl, CURLOPT_POST, 1);
-    		curl_setopt($curl, CURLOPT_POSTFIELDS);
-    		$content = curl_exec($ch);                    //执行并存储结果
-    		$contents=json_decode($content);
-    		// print_r($contents);
-			 // print_r(get_object_vars($contents[0]));
-			foreach ($contents as $key => $value) {
-				$value=get_object_vars($value);//strobj 转数组
-				$store_key=$value['系统编码'];
-				$data=array(
-					'store_key'=>$store_key,
-					'store_type'=>$value['店铺类型'],
-					'run_type'=>$value['经营类型'],
-					'area'=>$value['区域'],
-					'province'=>$value['省份'],
-					'city'=>$value['城市'],
-					'store_num'=>$value['店号'],
-					'name'=>$value['店名'],
-					'telephone'=>$value['电话'],
-					'site'=>$value['地址'],
-					'longitude'=>$value['X坐标'],
-					'latitude'=>$value['Y坐标'],
-
-				);
-				$map['store_key']=$store_key;
-				$bool=M('store')->Where($map)->select();//查看店铺是否存在
-				if(!$bool){//店铺不存在就添加
-					$add=M('store')->add($data);
+			$search=I('post.search');	
+			if($search){
+				$name=I('post.name');
+				$this->assign('name',$name);
+				$map['name']=array('like',"%$name%");
+				$count=M('store')->where($map)->count();
+				$p = getpage($count,10);
+				$this->assign('page',$p->show());
+				$store = M('store')->where($map)->order('store_key')->limit($p->firstRow.','.$p->listRows)->select();
+				// $store=M('store')->Where($map)->select();
+			}else{
+				$login=array(
+		            'sUserID'=>'admin',
+		            'sPassword'=>'123456',
+		            'sExportType'=>'JSON',
+		            'sCharsetName'=>'UTF-8',
+		        );
+				$result=$this->get_port('http://211.149.155.236:90/order.asmx/ABC_Login',$login);//接口登陆返回值
+				var_dump($result);
+				if($result['Status']==1){//登陆成功
+					$url='http://211.149.155.236:90/order.asmx/Get_ShpList';
+					$data=array(
+						'sUserEntry'=>1,
+					);
+					$shoplist=$this->get_port($url);//获取门店列表
+					var_dump($shoplist);
+				}else{
+					$ts=$result['Description'];
+					echo "<script>alert('$ts')</script>";
 				}
-			}
-			$store=M('store')->order('store_key')->select();
+				// if($result['Status']==1){
+				// 	foreach ($contents as $key => $value) {
+				// 		$value=get_object_vars($value);//strobj 转数组
+				// 		$store_key=$value['系统编码'];
+				// 		$data=array(
+				// 			'store_key'=>$store_key,
+				// 			'store_type'=>$value['店铺类型'],
+				// 			'run_type'=>$value['经营类型'],
+				// 			'area'=>$value['区域'],
+				// 			'province'=>$value['省份'],
+				// 			'city'=>$value['城市'],
+				// 			'store_num'=>$value['店号'],
+				// 			'name'=>$value['店名'],
+				// 			'telephone'=>$value['电话'],
+				// 			'site'=>$value['地址'],
+				// 			'longitude'=>$value['X坐标'],
+				// 			'latitude'=>$value['Y坐标'],
+
+				// 		);
+				// 		$map['store_key']=$store_key;
+				// 		$bool=M('store')->Where($map)->select();//查看店铺是否存在
+				// 		if(!$bool){//店铺不存在就添加
+				// 			$add=M('store')->add($data);
+				// 		}
+				// 	}
+				// }else{
+				// 	$ts=$result['Description'];
+				// 	echo "<script>alert('$ts')</script>";
+				// }
+				
+				$count=M('store')->count();
+				$p = getpage($count,10);
+				$this->assign('page',$p->show());
+				$store = M('store')->order('store_key')->limit($p->firstRow.','.$p->listRows)->select();
+				// $store=M('store')->order('store_key')->select();
+			}	
     		$this->assign('store',$store);
 			$this->display();
 		}

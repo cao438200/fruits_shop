@@ -686,7 +686,7 @@ input[type=checkbox].ace+.lbl:hover::before,input[type=radio].ace+.lbl:hover::be
 /**********************添加内容样式属性************************/
 .add_style{}
 .add_style li{ margin:15px 0px; position:relative}
-.add_style .label_name{ float:left; text-align:right; height:32px; line-height:32px; color:#999}
+.add_style .label_name{ float:left; text-align:right; height:42px; line-height:32px; color:#999}
 .add_style .label_name i{ color:#F33; margin-right:4px;}
 .add_style .Add_content{ float:left; display:block; line-height:32px; }
 .add_style .Add_content label{ margin-right:10px;margin-bottom: 0;font-weight: normal;cursor: pointer;}

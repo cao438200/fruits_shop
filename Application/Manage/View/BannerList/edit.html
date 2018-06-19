@@ -13,7 +13,7 @@
 <script src="__PUBLIC__/manage/js/shopFrame.js" type="text/javascript"></script>
 <script src="__PUBLIC__/manage/js/Sellerber.js" type="text/javascript"></script>
 <script src="__PUBLIC__/manage/js/layer/layer.js" type="text/javascript"></script>
-<title>添加轮播图</title>
+<title>编辑轮播图</title>
 </head>
 <!--[if lt IE 9]>
   <script src="js/html5shiv.js"></script>
@@ -90,13 +90,13 @@
 </script>
 <div class="margin add_administrator" id="page_style">
     <div class="add_style add_administrator_style">
-    <div class="title_name">添加轮播图</div>
-    <form method="post" class="form-x" action="__CONTROLLER__/add_banner" enctype="multipart/form-data">
+    <div class="title_name">编辑轮播图</div>
+    <form method="post" class="form-x" action="__CONTROLLER__/edit" enctype="multipart/form-data">
     <ul>
      <li class="clearfix">
      <label class="label_name col-xs-2 col-lg-2"><i>*</i>排序：</label>
      <div class="formControls col-xs-6">
-     <input type="number" class="input-text col-xs-12" value="" placeholder="数字越大越靠前" name="px" required="required" ></div>
+     <input type="number" class="input-text col-xs-12" value="{$banner.sort}" placeholder="数字越大越靠前" name="px" required="required" ></div>
     <div class="col-4"> <span class="Validform_checktip"></span></div>
      </li>
      <li class="clearfix">
@@ -106,7 +106,7 @@
             <input type="file" name="img" class="file_img" onchange="preview(this)" value="{$myself_bj[$row['id']]}" multiple="" accept="image/*">
             <div class="sctp">
               <div class="preview">
-                <img src="__PUBLIC__/../js/jiahao.jpg" />
+                <img src="__PUBLIC__/Uploads/{$banner.src}" />
               </div>  
             </div>
             <span class="help-block" style="color:red;text-align:left;padding-left:10px">请上传常见图片格式的图片</span>
@@ -116,6 +116,8 @@
       <li class="clearfix">
 			<div class="col-xs-2 col-lg-2">&nbsp;</div>
 			<div class="col-xs-6">
+      <input type="hidden" name="op" value="edit">
+      <input type="hidden" name="banner_id" value="{$banner.Id}">
 	  <button class="btn button_btn bg-deep-blue " type="submit" value="">提交</button>
       <!-- <input name="reset" type="reset" class="btn button_btn btn-gray" value="取消重置" /> -->
       <a href="javascript:ovid()" onclick="javascript :history.back(-1);" class="btn btn-info button_btn"><i class="fa fa-reply"></i>返回上一步</a>

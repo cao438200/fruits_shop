@@ -16,11 +16,12 @@
 <script src="__PUBLIC__/manage/js/laydate/laydate.js" type="text/javascript"></script>
 <title>菜谱管理</title>
 </head>
-<!--[if lt IE 9]>
-  <script src="js/html5shiv.js"></script>
-  <script src="js/respond.min.js"></script>
-  <script src="js/css3-mediaqueries.js"  type="text/javascript"></script>
-  <![endif]-->
+<?php 
+  if(!$_SESSION['administrator']){
+    redirect('Manage/Index/index',1,'请先登陆后台');
+  }
+
+?>
 <body>
 <div class="margin" id="page_style">
 
@@ -68,12 +69,9 @@
      <td>{$vo.menu_cl}</td>
    <!--   <td style="width:400px;height:150px;overflow-y: auto">{$vo.desc}</td> -->
      <td>{$vo.createtime}</td>
-     <td>
-        <if condition="$vo.status eq 1 ">开启
-        <else/>
-        停用
-        </if>
-     </td>
+     <td class="td-status"><span class="label label-success label-sm"><if condition="$vo.status eq 1 ">已启用
+        <else />已停用
+    </if></span></td>
      <td class="td-manage">
                 <if condition="$vo.status eq 2 ">
                 <a style="text-decoration:none" class="btn button_btn btn-gray" onClick="Competence_start(this,'{$vo.Id}')" href="javascript:;" title="开启">开启</a>

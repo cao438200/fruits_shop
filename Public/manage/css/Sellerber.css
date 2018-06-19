@@ -317,8 +317,8 @@
 .nav-list>dd>a,
 .nav-list>dt>a {
     display: block;
-    height: 38px;
-    line-height: 36px;
+    height: 45px;
+    line-height: 45px;
     padding: 0 16px 0 7px;
     background-color: #f9f9f9;
     color: #585858;

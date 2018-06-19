@@ -15,5 +15,5 @@
         $p->setConfig('theme', '%FIRST%%UP_PAGE%%LINK_PAGE%%DOWN_PAGE%%END%%HEADER%');  
         $p->lastSuffix = false;//最后一页不显示为总页数  
         return $p;  
-    }  
+    } 
 ?>  
