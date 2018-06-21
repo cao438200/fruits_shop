@@ -4,25 +4,33 @@ use Think\Controller;
 class MemberListController extends Controller {
     public function index(){
     	$member_name=I('post.member_name');//搜索用户名
-    	$start=I('post.start_time');//开始时间
-    	$end=I('post.end_time');//结束时间
+        $this->assign('member_name',$member_name);
+        $start_time=I('post.start_time');//开始时间
+        $this->assign('start_time',$start);
+        if($start_time){
+            $start=$start_time;
+        }else{
+            $start='2000-11-11';
+        }
+        $end_time=I('post.end_time');//结束时间
+        $this->assign('end_time',$end);
+        if($end_time){
+            $end=$end_time;
+        }else{
+            $end='3000-11-11';
+        }
     	$sosou=I('post.op');//判断是否搜索
     	if($sosou){	
 	    	if($member_name){
-	    		if($start && $end){
-	    			$map['sVIPName']=array('like','%$member_name%');
-	    			$map['_string'] = "createtime between $start AND '$end 23:59:59' ";
-	    		}else{
-	    			$map['sVIPName']=array('like',"%$member_name%");
-	    		}
-	    	}elseif($start && $end){
-	    		$map['_string'] = "createtime between $start AND '$end 23:59:59' ";
+	    		$map['sVIPName']=array('like', "%$member_name%");
+	    		$map['createtime'] = array('between',"$start,$end 23:59:59");
+	    	}else{
+	    		$map['createtime'] = array('between',"$start,$end 23:59:59");
 	    	}
 	    	$count=M('member')->where($map)->count();
 			$p = getpage($count,2);
 			$this->assign('page',$p->show());
 			$member = M('member')->where($map)->order('createtime desc')->limit($p->firstRow.','.$p->listRows)->select();
-
     	}else{
     		$count = M('member')->count();//总条数
 	        $p = getpage($count,2);//分页

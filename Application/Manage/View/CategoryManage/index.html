@@ -14,7 +14,7 @@
 <script src="__PUBLIC__/manage/js/layer/layer.js" type="text/javascript"></script>
 <script src="__PUBLIC__/manage/js/jquery.dataTables.min.js"></script>
 <script src="__PUBLIC__/manage/js/jquery.dataTables.bootstrap.js"></script>
-<title>优惠券列表</title>
+<title>商品分类列表</title>
 </head>
 <?php 
   if(!$_SESSION['administrator']){
@@ -30,32 +30,17 @@
        <table id="sample_table" class="table table_list table_striped table-bordered dataTable no-footer">
 		 <thead>
 			<tr>
-			  <th>优惠券类别</th>
-			  <th class="hidden-480">优惠满减下限(元)</th> 
-			  <th class="hidden-480">优惠金额(元)</th> 
-			  <th class="hidden-480">优惠券时效(天)</th>
-			  <th class="hidden-480">优惠券描述</th>         
-			  <th class="hidden-480">操作</th>
+			  <th>id</th>
+			  <th class="hidden-480">分类名称</th> 
+			  <th class="hidden-480">分类编号</th> 
       		</tr>
 		</thead>
       <tbody>
-       <volist name="coupons" id="vo">
+       <volist name="list" id="vo">
 			  <tr>
-				<td>
-					<switch name="vo.type" >
-					    <case value="1">特殊时间</case>
-					    <case value="2">新用户</case>
-					    <default />
-				    </switch>
-					<!-- {$vo.type} -->
-				</td>	
-        		<td>{$vo.less_price}</td>
-        		<td>{$vo.reduce_price}</td>
-        		<td>{$vo.valid_time}</td>
-        		<td>{$vo.desc}</td>
-				<td class="td-manage">
-                <a title="积分倍数编辑" href="{:U('CouponList/edit',array('coupon_id'=>$vo['Id']))}" class="btn button_btn bg-deep-blue" id="jf_edit">优惠券编辑</a>        
-				</td>
+        		<td>{$vo.Id}</td>
+        		<td>{$vo.GroupName}</td>
+        		<td>{$vo.GroupCode}</td>
 			 </tr>	
        </volist>			
 		    </tbody>
@@ -75,4 +60,5 @@ $("body").niceScroll({
 	cursorborder:"0",  
 	cursorborderradius:"5px"  
 });
+
 </script>

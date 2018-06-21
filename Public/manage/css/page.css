@@ -33,4 +33,8 @@
                 color: #FFF;  
                 font-weight: 700;  
                 border-color: #50A8E6;  
-            }  
+            } 
+            .rows{
+                float: right;
+                margin-right: 20px;
+            } 

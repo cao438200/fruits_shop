@@ -27,11 +27,11 @@
    <div class="operation clearfix">
    <form action="__CONTROLLER__/index" method="post">
     <ul class="choice_search">
-     <li class="clearfix col-xs-2 col-lg-2 col-ms-3 "><label class="label_name ">会员名称：</label><input name="member_name" type="text"  class="form-control col-xs-6 col-lg-5"/ value="{$name}"></li>
+     <li class="clearfix col-xs-2 col-lg-2 col-ms-3 "><label class="label_name ">会员名称：</label><input name="member_name" type="text"  class="form-control col-xs-6 col-lg-5"/ value="{$member_name}"></li>
       <li class="clearfix col-xs-4 col-lg-5 col-ms-5 "><label class="label_name ">消费时间：</label> 
-     <input class="laydate-icon col-xs-4 col-lg-3" id="start" style=" margin-right:10px; height:28px; line-height:28px; float:left" name="start_time">
+     <input class="laydate-icon col-xs-4 col-lg-3" id="start" style=" margin-right:10px; height:28px; line-height:28px; float:left" name="start_time" value="{$start_time}">
       <span  style=" float:left; padding:0px 10px; line-height:32px;">至</span>
-      <input class="laydate-icon col-xs-4 col-lg-3" id="end" style="height:28px; line-height:28px; float:left" name="end_time"></li>
+      <input class="laydate-icon col-xs-4 col-lg-3" id="end" style="height:28px; line-height:28px; float:left" name="end_time" value="{$end_time}"></li>
       <input type="hidden" name="op" value="sosou">
      <button class="btn button_btn bg-deep-blue "  type="submit"><i class="fa  fa-search"></i>&nbsp;搜索</button>
     </ul>

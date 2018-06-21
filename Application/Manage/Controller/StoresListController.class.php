@@ -14,55 +14,45 @@
 				$store = M('store')->where($map)->order('store_key')->limit($p->firstRow.','.$p->listRows)->select();
 				// $store=M('store')->Where($map)->select();
 			}else{
-				$login=array(
-		            'sUserID'=>'admin',
-		            'sPassword'=>'123456',
-		            'sExportType'=>'JSON',
-		            'sCharsetName'=>'UTF-8',
-		        );
-				$result=$this->get_port('http://211.149.155.236:90/order.asmx/ABC_Login',$login);//接口登陆返回值
-				var_dump($result);
+				$result=$this->get_logion_status();//接口登陆返回值
 				if($result['Status']==1){//登陆成功
 					$url='http://211.149.155.236:90/order.asmx/Get_ShpList';
 					$data=array(
-						'sUserEntry'=>1,
+						'sUserEntry'=>'1',
+						'sShpType'=>'',
+						'sCity'=>'',
+						'sShpName'=>'',
 					);
-					$shoplist=$this->get_port($url);//获取门店列表
-					var_dump($shoplist);
+					$shoplist=$this->get_port($url,$data);//获取门店列表
+					// var_dump($shoplist);die;
+					for ($i=0;$i<10;$i++) {
+						$value=$shoplist[$i];
+						$store_key=$value['系统编码'];
+						$data=array(
+							'store_key'=>$store_key,
+							'store_type'=>$value['店铺类型'],
+							'run_type'=>$value['经营类型'],
+							'area'=>$value['区域'],
+							'province'=>$value['省份'],
+							'city'=>$value['城市'],
+							'store_num'=>$value['店号'],
+							'name'=>$value['店名'],
+							'telephone'=>$value['电话'],
+							'site'=>$value['地址'],
+							'longitude'=>$value['X坐标'],
+							'latitude'=>$value['Y坐标'],
+
+						);
+						$map['store_key']=$store_key;
+						$bool=M('store')->Where($map)->select();//查看店铺是否存在
+						if(!$bool){//店铺不存在就添加
+							$add=M('store')->add($data);
+						}
+					}
 				}else{
 					$ts=$result['Description'];
 					echo "<script>alert('$ts')</script>";
 				}
-				// if($result['Status']==1){
-				// 	foreach ($contents as $key => $value) {
-				// 		$value=get_object_vars($value);//strobj 转数组
-				// 		$store_key=$value['系统编码'];
-				// 		$data=array(
-				// 			'store_key'=>$store_key,
-				// 			'store_type'=>$value['店铺类型'],
-				// 			'run_type'=>$value['经营类型'],
-				// 			'area'=>$value['区域'],
-				// 			'province'=>$value['省份'],
-				// 			'city'=>$value['城市'],
-				// 			'store_num'=>$value['店号'],
-				// 			'name'=>$value['店名'],
-				// 			'telephone'=>$value['电话'],
-				// 			'site'=>$value['地址'],
-				// 			'longitude'=>$value['X坐标'],
-				// 			'latitude'=>$value['Y坐标'],
-
-				// 		);
-				// 		$map['store_key']=$store_key;
-				// 		$bool=M('store')->Where($map)->select();//查看店铺是否存在
-				// 		if(!$bool){//店铺不存在就添加
-				// 			$add=M('store')->add($data);
-				// 		}
-				// 	}
-				// }else{
-				// 	$ts=$result['Description'];
-				// 	echo "<script>alert('$ts')</script>";
-				// }
-				
 				$count=M('store')->count();
 				$p = getpage($count,10);
 				$this->assign('page',$p->show());

@@ -14,7 +14,7 @@
 <script src="__PUBLIC__/manage/js/Sellerber.js" type="text/javascript"></script>
 <script src="__PUBLIC__/manage/js/layer/layer.js" type="text/javascript"></script>
 <script src="__PUBLIC__/manage/js/laydate/laydate.js" type="text/javascript"></script>
-<title>店铺管理</title>
+<title>商品管理</title>
 </head>
 <?php 
   if(!$_SESSION['administrator']){
@@ -27,62 +27,52 @@
    <div class="operation clearfix">
    <form action="__CONTROLLER__/index" method="post">
     <ul class="choice_search">
-     <li class="clearfix col-xs-2 col-lg-2 col-ms-3 "><label class="label_name ">店铺名称：</label><input name="name" type="text" value="{$name}" class="form-control col-xs-6 col-lg-5"/></li>
+     <li class="clearfix col-xs-2 col-lg-2 col-ms-3 "><label class="label_name ">商品名：</label><input name="name" type="text" value="{$name}" class="form-control col-xs-6 col-lg-5"/></li>
      <input type="hidden" name="search" value="search">
      <button class="btn button_btn bg-deep-blue "   type="submit"><i class="fa  fa-search"></i>&nbsp;搜索</button>
     </ul>
     </form>
     </div>
 <div class="bkg_List_style">
- <!-- <div class="bkg_List_operation clearfix">
-  <ul class="bkg_List_Button_operation">
-   <li class="btn btn-danger"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_add"></em>删除用户</a></li>
-   <li class="btn bg-deep-blue"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_modify"></em>修改用户</a></li>
-   <li class="btn bg-deep-blue"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_delete"></em>添加用户</a></li>
-   <li class="btn btn-Dark-success"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_close"></em>关闭用户</a></li>
-  </ul>
- </div> -->
  <div class="bkg_List clearfix">
   <table class="table  table_list table_striped table-bordered">
    <thead>
     <tr>
-     <th>店铺名</th>
-     <th>店铺号</th>
-     <th>电话</th>
-     <th>店铺类型</th>
-     <th>经营类型</th>
-    <th>省份</th>
-     <th>城市</th>
-     <th>店铺区域</th>
-     <th>店铺具体地址</th>
-     <th>店铺经度</th>
-     <th>店铺纬度</th>
+    <th>商品图</th>
+     <th>商品名</th>
+     <th>商品编号</th>
+     <th>分类名</th>
+     <th>品牌名</th>
+     <th>零售价</th>
+    <th>会员价</th>
+    <th>规格型号</th>
+     <th>单位</th>
+     <th>状态</th>
      <th>操作</th>
     </tr>
    </thead>
    <tbody>
-   <volist name="store" id="vo">
+   <volist name="list" id="vo">
     <tr>
-     <td>{$vo.name}</td>
-     <td>{$vo.store_num}</td>
-     <td>{$vo.telephone}</td>
-     <td>{$vo.store_type}</td>
-     <td>{$vo.run_type}</td>
-     <td>{$vo.province}</td>
-     <td>{$vo.city}</td>
-     <td>{$vo.area}</td>
-     <td>{$vo.site}</td>
-     <td>{$vo.longitude}</td>
-     <td>{$vo.latitude}</td>
-  <!--    <td></td> -->
+     <td><img src="__PUBLIC__/Uploads/{$vo.img_src}" style="width:60px;height:60px;"></td>
+     <td>{$vo.comdName}</td>
+     <td>{$vo.comdNum}</td>
+     <td>{$vo.FcomdType}</td>
+     <td>{$vo.brand}</td>
+     <td>{$vo.retailPrice}</td>
+     <td>{$vo.tradePrice}</td>
+     <td>{$vo.specModel}</td>
+     <td>{$vo.unit}</td>
+     <td class="td-status"><span class="label label-success label-sm">
+        <if condition="$vo.status eq 1">
+            上架
+        <else/>
+            下架
+        </if></span>
+     </td>
      <td class="td-manage">
-                <!-- <if condition="$vo.status eq 2 ">
-                <a style="text-decoration:none" class="btn button_btn btn-gray" onClick="Competence_start(this,'{$vo.id}')" href="javascript:;" title="开启">开启</a>
-                <else/>
-                <a title="关闭" onclick="Competence_close(this,'{$vo.id}')" href="javascript:;" class="btn button_btn btn-Dark-success">关闭</a>
-                </if>  -->
-                <a title="门店编辑" href="{:U('StoresList/add_store',array('store_id'=>$vo['Id']))}" class="btn button_btn bg-deep-blue">门店编辑</a>        
-        </td>
+        <a title="商品编辑" href="{:U('Products/edit_products',array('products_id'=>$vo['Id']))}" class="btn button_btn bg-deep-blue">商品编辑</a>        
+     </td>
     </tr>
     </volist>
    </tbody>
@@ -98,12 +88,12 @@
 <script>
 /*******滚动条*******/
 $("body").niceScroll({  
-  cursorcolor:"#888888",  
-  cursoropacitymax:1,  
-  touchbehavior:false,  
-  cursorwidth:"5px",  
-  cursorborder:"0",  
-  cursorborderradius:"5px"  
+	cursorcolor:"#888888",  
+	cursoropacitymax:1,  
+	touchbehavior:false,  
+	cursorwidth:"5px",  
+	cursorborder:"0",  
+	cursorborderradius:"5px"  
 });
 /******时间设置*******/
   var start = {

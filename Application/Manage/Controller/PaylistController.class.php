@@ -7,7 +7,7 @@ use Think\Controller;
 class PaylistController extends Controller {
 
     public function index(){
-
+["系统编码"]=> int(1) ["商品编号"]=> string(5) "99999" ["商品名称"]=> string(13) "测试商品A" ["颜色"]=> string(3) "无" ["品牌"]=> string(9) "品忆香" ["商品分类"]=> string(9) "辅料类" ["规格型号"]=> string(3) "1*1" ["二级分类"]=> string(0) "" ["三级分类"]=> string(15) "综合果仁类" ["A1"]=> string(6) "线上" ["计量单位"]=> string(2) "kg" ["零售价"]=> float(10) ["批发价"]=> float(10) ["是否停用"]=> string(6) "正常" } 
 
       //实例化产品类别表
       $tab=M('bigad3')->where(array('dd'=>1))->select();

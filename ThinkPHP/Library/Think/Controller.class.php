@@ -54,35 +54,87 @@ abstract class Controller {
     }
     //调用接口方法
     public  function get_port($url,$data=''){
-        // $url="http://211.149.155.236:90/order.asmx/ABC_Login";
         $data=http_build_query($data);
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        if($data){
+        if($data){ 
+            curl_setopt($curl, CURLOPT_POST, 1);  
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-        }else{
-            curl_setopt($curl, CURLOPT_POSTFIELDS);
         }
         $result = curl_exec($curl);
         curl_close($curl);
         $result=json_decode($result,true);
         return $result;
     }
-    // public function get_logion_status(){
-    //     //登陆接口
-    //     $url="http://211.149.155.236:90/order.asmx/ABC_Login";
-    //     $data=array(
-    //         'sUserID'=>'admin',
-    //         'sPassword'=>'123456',
-    //         'sExportType'=>'JSON',
-    //         'sCharsetName'=>'UTF-8',
-    //     );
-    //     return $this->get_port($url,$data);
-    // }
-
+    //登陆接口
+    public function get_logion_status(){ 
+        $url="http://211.149.155.236:90/order.asmx/ABC_Login";
+        $data=array(
+            'sUserID'=>'admin',
+            'sPassword'=>'123456',
+            'sExportType'=>'JSON',
+            'sCharsetName'=>'UTF-8',
+        );
+        return $this->get_port($url,$data);
+    }
+    //获取卡号
+    public function getCardID($card){
+        $y=date('y');//当前年
+        $m=date('m');//当前月
+        $h=date('H');//当前时
+        $i=date('i');//当前分
+        // $y='18';
+        // $m='06';
+        // $h='17';
+        // $i='59';
+        if($i+5>59){
+            $i=$i+5-60;
+            $i='0'.$i;
+            $h=$h+1;
+            if($h<10){
+                $h='0'.$h;
+            }
+        }
+        $cards=$card.$y.$m.$h.$i;//第一步
+        $cards=str_split($cards);//字符串转化数组
+        $legth=count($cards);
+        for($i=0; $i <$legth ; $i++) { //第二步数字替换
+            if($cards[$i]==0){
+                $cards[$i]=2;
+            }elseif ($cards[$i]==1) {
+                $cards[$i]=3;
+            }elseif ($cards[$i]==2) {
+                $cards[$i]=5;
+            }elseif ($cards[$i]==3) {
+                $cards[$i]=9;
+            }elseif ($cards[$i]==4) {
+                $cards[$i]=0;
+            }elseif ($cards[$i]==5) {
+                $cards[$i]=8;
+            }elseif ($cards[$i]==6) {
+                $cards[$i]=4;
+            }elseif ($cards[$i]==7) {
+                $cards[$i]=7;
+            }elseif ($cards[$i]==8) {
+                $cards[$i]=6;
+            }elseif ($cards[$i]==9) {
+                $cards[$i]=1;
+            }
+        }
+        $cards=array_reverse($cards);//第三步反转
+        $legths=floor($legth/2);
+        for($i=0; $i <$legths ; $i++){//卡号从左至右前后对调位置
+            $center=$cards[2*$i];
+            $cards[2*$i]=$cards[2*$i+1];
+            $cards[2*$i+1]=$center;
+        }
+        foreach($cards as $key => $value) {//数组转字符串
+            $cardID .=$value;
+        }
+        return $cardID;
+    }
     /**
      * 模板显示 调用内置的模板引擎显示方法，
      * @access protected

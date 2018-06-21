@@ -34,11 +34,11 @@
  </ul>
 </div>
 <div class="status_order margin-bottom">
-  <a href="{:U('OrderPs/index',array('op'=>'order_0'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_0'"> style="background:#1779BB !important; " </if> <empty name="op">style="background:#1779BB !important;" </empty> >所有订单(454)</a>
-  <a href="{:U('OrderPs/index',array('op'=>'order_1'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_1'"> style="background:#1779BB !important;" </if> >待配送(44)</a>
-  <a href="{:U('OrderPs/index',array('op'=>'order_2'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_2'"> style="background:#1779BB !important;" </if> >正在配送(54)</a>
-  <a href="{:U('OrderPs/index',array('op'=>'order_3'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_3'"> style="background:#1779BB !important;" </if> >已完成(454)</a>
- <!--  <a href="javascrpit:void" class="btn button_btn btn-info status_btn">代付款(454)</a> -->
+  <a href="{:U('OrderPs/index',array('op'=>'order_0'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_0'"> style="background:#1779BB !important; " </if> <empty name="op">style="background:#1779BB !important;" </empty> >所有订单({$num0})</a>
+  <a href="{:U('OrderPs/index',array('op'=>'order_1'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_1'"> style="background:#1779BB !important;" </if> >待配送({$num1})</a>
+  <a href="{:U('OrderPs/index',array('op'=>'order_2'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_2'"> style="background:#1779BB !important;" </if> >正在配送({$num2})</a>
+  <a href="{:U('OrderPs/index',array('op'=>'order_3'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_3'"> style="background:#1779BB !important;" </if> >已完成({$num3})</a>
+  <a href="{:U('OrderPs/index',array('op'=>'order_4'))}" class="btn button_btn btn-info status_btn" <if condition="$op eq 'order_4'"> style="background:#1779BB !important;" </if> >退款订单({$num4})</a>
  </div>
 <div class="operation clearfix">
 <!-- <button class="btn button_btn btn-danger" type="button" onclick=""><i class="fa fa-trash-o"></i>&nbsp;删除</button>  -->
@@ -69,7 +69,7 @@
    <th >支付时间</th>
    <th >消费金额</th>
    <th >优惠金额</th>
-   <th >发货时间</th>
+   <th >完成时间</th>
    <th >备注</th>
    <th >状态</th>
    <th >操作</th>
@@ -85,15 +85,16 @@
      <td>{$vo.paytime}</td>
      <td>{$vo.useprice}</td>
      <td>{$vo.yh_price}</td>
-     <td>{$vo.ps_time}</td>
+     <td>{$vo.endtime}</td>
      <td>{$vo.remark}</td>
-     <td>
+     <td class="td-status" style="cursor:pointer;" onClick="changeStatus('{$vo.Id}','{$vo.status}')"><span class="label label-success label-sm">
         <switch name="vo.status" >
 			<case value="1">代配送</case>
 			<case value="2">正在配送</case>
 			<case value="3">已完成</case>
 			<case value="4">退款</case>
 		</switch>
+    </span>
      </td>
      <td class="td-manage">
         <a title="订单详情" href="{:U('OrderPs/order_menu',array('order_id'=>$vo['Id']))}" class="btn button_btn bg-deep-blue">订单详情</a> 
@@ -108,39 +109,7 @@
 </body>
 </html>
 <script>
-// var orderps_all={$orderps_all};
-// for(var i=0;i<count(orderps_all);i++){
-// 	dataSet[i]=['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','1','201608250560345','2016-08-25 12:23:34','345.50','3','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="Order_detailed.html" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>']
-// };
-// alert(dataSet);
-// var dataSet=[
-//  ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','1','201608250560345','2016-08-25 12:23:34','345.50','3','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="Order_detailed.html" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-//   ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','2','201608150560345','2016-08-25 12:23:34','145.50','1','未完成','2016-08-28 15:23:12','用户取消订单',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-//     ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','3','201608150560345','2016-08-25 12:23:34','145.50','1','未完成','2016-08-28 15:23:12','用户取消订单',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 	  ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','4','201608150560345','2016-08-25 12:23:34','145.50','1','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 	    ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','5','201608150560345','2016-08-25 12:23:34','145.50','1','未完成','2016-08-28 15:23:12','买家未付款',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 		  ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','6','201608150560345','2016-08-25 12:23:34','145.50','1','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 		    ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','7','201608150560345','2016-08-25 12:23:34','145.50','1','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 			 ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','8','201608250560345','2016-08-25 12:23:34','345.50','3','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 			  ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','9','201607250560345','2016-08-25 12:23:34','235.50','2','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 			   ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','10','201608250560345','2016-08-25 12:23:34','345.50','3','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// 			    ['<label><input type="checkbox" class="ace"><span class="lbl"></span></label>','11','201608250560345','2016-08-25 12:23:34','345.50','3','已完成','2016-08-28 15:23:12','',' <a href="javascript:void()" onclick="picture_del(this,'+10001+')" class="btn btn-danger operation_btn">删除</a> <a href="javascript:void()" onclick="picture_img(this,'+234+')" class="btn bg-deep-blue operation_btn">查看</a>'],
-// ];
  jQuery(function($) {
-				// var oTable1 = $('#sample-table').dataTable( {
-				// "data": dataSet,
-				// "width":"100%",	
-				// "bLengthChange":false,
-				// "iDisplayLength": 5,
-				// //"columns" : _tableCols,
-				// "aaSorting": [[ 1, "desc" ]],//默认第几个排序
-		  //       "bStateSave": true,//状态保存
-				// "searching": false,
-		  //       "aoColumnDefs": [{"orderable":false,"aTargets":[0,2,3,5,6,7,8]
-				// }]
-		
-			 //   });
-			
 				$('table th input:checkbox').on('click' , function(){
 					var that = this;
 					$(this).closest('table').find('tr > td:first-child input:checkbox')
@@ -151,12 +120,25 @@
 						
 				});
 			});
-	/*产品-删除*/
-function picture_del(obj,id){
-	layer.confirm('确认要删除吗？',{icon:0,},function(index){
-		$(obj).parents("tr").remove();
-		layer.msg('已删除!',{icon:1,time:1000});
-	});
+	/*订单状态修改*/
+function changeStatus(id,status){
+    $id=id;
+    $status=status;
+    if($status==1){
+      $msg='确认订单正在配送吗？';
+    }else if($status==2){
+      $msg='确认订单已完成吗？';
+    }else if($status==3){
+      $msg='确认订单已退款吗？';
+    }else{
+      return false;
+    }
+  layer.confirm($msg,function(index){
+    $.post("{:U('OrderPs/change')}", { id: id,status:status}, function(data) {
+          location.reload();
+        });
+    layer.msg('已确认!',{icon: 6,time:1000});
+  });
 }
 /*******滚动条*******/
 $("body").niceScroll({  
