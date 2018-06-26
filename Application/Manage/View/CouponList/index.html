@@ -32,7 +32,8 @@
 			<tr>
 			  <th>优惠券类别</th>
 			  <th class="hidden-480">优惠满减下限(元)</th> 
-			  <th class="hidden-480">优惠金额(元)</th> 
+			  <th class="hidden-480">优惠金额(元)</th>
+			  <th class="hidden-480">优惠券显示时间</th> 
 			  <th class="hidden-480">优惠券时效(天)</th>
 			  <th class="hidden-480">优惠券描述</th>         
 			  <th class="hidden-480">操作</th>
@@ -51,6 +52,13 @@
 				</td>	
         		<td>{$vo.less_price}</td>
         		<td>{$vo.reduce_price}</td>
+        		<td>
+        		<switch name="vo.type" >
+					<case value="1">{$vo.start_time}--{$vo.end_time}</case>
+					<case value="2">新用户</case>
+					<default />
+				</switch>
+				</td>
         		<td>{$vo.valid_time}</td>
         		<td>{$vo.desc}</td>
 				<td class="td-manage">

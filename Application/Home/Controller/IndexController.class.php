@@ -3,20 +3,6 @@ namespace Home\Controller;
 use Think\Controller;
 class IndexController extends Controller {
     public function index(){
-        $website=M('lianxi')->where(array('id'=>2))->find();
-        $this->assign('website',$website);
-	//友情链接
-        $links=M('alink')->where(array('dd'=>1))->order('id desc')->select();
-        $this->assign('links',$links);
-    //资讯分类
-    	$types=M('bigad2')->where(array('dd'=>1))->order('id asc')->field('id')->select();
-    	$this->assign('types',$types);
-	//查询最新的产品资讯
-    	$articles_1 = M('article')->where(array('dd'=>1,'aid'=>$types[0]['id']))->order('id desc')->limit(0,3)->select();
-    	$this->assign('articles_1',$articles_1);
-    //查询最新的行业新闻
-    	$articles_2 = M('article')->where(array('dd'=>1,'aid'=>$types[1]['id']))->order('id desc')->limit(0,3)->select();
-    	$this->assign('articles_2',$articles_2);
-        $this->display();
+        $this->show('<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} body{ background: #fff; font-family: "微软雅黑"; color: #333;font-size:24px} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.8em; font-size: 36px } a,a:hover{color:blue;}</style><div style="padding: 24px 48px;"> <h1>:)</h1><p>欢迎使用 <b>ThinkPHP</b>！</p><br/>版本 V{$Think.version}</div><script type="text/javascript" src="http://ad.topthink.com/Public/static/client.js"></script><thinkad id="ad_55e75dfae343f5a1"></thinkad><script type="text/javascript" src="http://tajs.qq.com/stats?sId=9347272" charset="UTF-8"></script>','utf-8');
     }
 }

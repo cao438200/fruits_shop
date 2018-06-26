@@ -73,6 +73,26 @@
 		public function edit_products(){
 			$id=I('get.products_id');
 			$products=M('commodity')->Where("Id=$id")->find();
+			$name=$products['comdName'];//商品名
+			$menuid=$products['menuid'];//商品菜单id
+			$menuid=json_decode($menuid);//转化为数组
+			foreach($menuid as $key=>$value){
+				$menuids[$value]=$value;
+			}
+			$menu=M('menu')->field('Id,name,menu_main')->Where('status=1')->select();//所有菜单
+			foreach ($menu as $key => $value) {
+				$flag=stristr($name,$value['menu_main']);//判断主料是否在商品名中
+				if($flag){
+					$menus[$key]['Id']=$value['Id'];
+					$menus[$key]['name']=$value['name'];
+					if($menuids[$value['Id']]){//判断是否已选
+						$menus[$key]['flag']=1;
+					}else{
+						$menus[$key]['flag']=0;
+					}
+				}
+			}
+			$this->assign('menus',$menus);
 			$this->assign('products',$products);
 			$this->display();
 		}
@@ -80,6 +100,8 @@
 		public function change(){
 			$id=I('post.edit_id');
 			$data['desc']=I('post.content');//商品详情
+			$menuid=I('post.menu');
+			$menuid=$data['menuid']=json_encode($menuid);
             $photo=isset($_FILES['img'])?$_FILES['img']:'';
 
             $upload = new \Think\Upload();// 实例化上传类    

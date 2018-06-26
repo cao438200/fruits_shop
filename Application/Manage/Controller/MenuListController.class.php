@@ -48,13 +48,16 @@ class MenuListController extends Controller {
     	$name=I('post.name');
     	$content=I('post.content');
 		$time=date('Y-m-d H:i:s');
-		$menu_cl=I('post.menu_cl');
-		
+		$menu_main=I('post.menu_main');
+		$se_minor=I('post.se_minor');
+        $first_minor=I('post.first_minor');
 		$data=array(
 			'name'=>$name,
 			'desc'=>$content,
 			'createtime'=>$time,
-			'menu_cl'=>$menu_cl,
+			'menu_main'=>$menu_main,
+            'first_minor'=>$first_minor,
+            'se_minor'=>$se_minor,
 			'status'=>1,//默认开启
 		);    	
 		$bool=M('menu')->add($data);
@@ -73,12 +76,16 @@ class MenuListController extends Controller {
     public function change_menu(){
     	$name=I('post.name');
     	$content=I('post.content');
-		$menu_cl=I('post.menu_cl');
+		$menu_main=I('post.menu_main');
+        $se_minor=I('post.se_minor');
+        $first_minor=I('post.first_minor');
 		$id=I('post.edit_id');
 		$data=array(
 			'name'=>$name,
 			'desc'=>$content,
-			'menu_cl'=>$menu_cl,
+			'menu_main'=>$menu_main,
+            'first_minor'=>$first_minor,
+            'se_minor'=>$se_minor,
 		);    	
 		$bool=M('menu')->Where("Id=$id")->save($data);
 		if($bool){

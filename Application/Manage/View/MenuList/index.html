@@ -28,34 +28,19 @@
    <div class="operation clearfix">
 <button class="btn button_btn btn-danger" type="button" id="user_del_all"><i class="fa fa-trash-o"></i>&nbsp;删除</button>
 <a href="__CONTROLLER__/add_menu"  class="btn button_btn bg-deep-blue" title="添加管理员"><i class="fa  fa-edit"></i>&nbsp;添加菜谱</a>
-  <!-- <select class="select Competence_sort" name="admin-role" size="1" id="Competence_sort">
-          <option value="0">--选择分类--</option>
-          <option value="1">超级管理员</option>
-          <option value="2">普通管理员</option>
-          <option value="3">栏目编辑</option>
-        </select> -->
    <div class="search  clearfix">
-
-   <!-- <input name="" type="text"  class="form-control col-xs-8"/><button class="btn button_btn bg-deep-blue " onclick=""  type="button"><i class="fa  fa-search"></i>&nbsp;搜索</button> -->
 </div>
 </div>
 <div class="bkg_List_style">
- <!-- <div class="bkg_List_operation clearfix">
-  <ul class="bkg_List_Button_operation">
-   <li class="btn btn-danger"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_add"></em>删除用户</a></li>
-   <li class="btn bg-deep-blue"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_modify"></em>修改用户</a></li>
-   <li class="btn bg-deep-blue"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_delete"></em>添加用户</a></li>
-   <li class="btn btn-Dark-success"><a href="javascrpt:void()" class="btn_add"><em class="bkg_List_icon icon_close"></em>关闭用户</a></li>
-  </ul>
- </div> -->
  <div class="bkg_List clearfix">
   <table class="table  table_list table_striped table-bordered">
    <thead>
     <tr>
     <th class="center"><label><input type="checkbox" class="ace"><span class="lbl"></span></label></th>
      <th>菜谱名</th>
-     <th>菜谱搭配</th>
-     <!-- <th>菜谱详情</th> -->
+     <th>菜谱主料</th>
+     <th>菜谱辅料1</th>
+     <th>菜谱辅料2</th>
      <th>上传时间</th>
      <th>状态</th>
      <th>操作</th>
@@ -66,8 +51,9 @@
     <tr>
     <td class="center"><label><input type="checkbox" class="ace" value={$vo.Id}><span class="lbl"></span></label></td>
      <td>{$vo.name}</td>
-     <td>{$vo.menu_cl}</td>
-   <!--   <td style="width:400px;height:150px;overflow-y: auto">{$vo.desc}</td> -->
+     <td>{$vo.menu_main}</td>
+     <td>{$vo.first_minor}</td>
+     <td>{$vo.se_minor}</td>
      <td>{$vo.createtime}</td>
      <td class="td-status"><span class="label label-success label-sm"><if condition="$vo.status eq 1 ">已启用
         <else />已停用

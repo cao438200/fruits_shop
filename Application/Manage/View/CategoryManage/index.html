@@ -31,16 +31,22 @@
 		 <thead>
 			<tr>
 			  <th>id</th>
-			  <th class="hidden-480">分类名称</th> 
-			  <th class="hidden-480">分类编号</th> 
+			  <th class="hidden-480">分类图</th> 
+			  <th class="hidden-480">分类名称</th>
+			  <th class="hidden-480">分类编号</th>
+			  <th class="hidden-480">操作</th>
       		</tr>
 		</thead>
       <tbody>
        <volist name="list" id="vo">
 			  <tr>
         		<td>{$vo.Id}</td>
+        		<td><img src="__PUBLIC__/Uploads/{$vo.src}" style="width:60px;height:60px;"></td>
         		<td>{$vo.GroupName}</td>
         		<td>{$vo.GroupCode}</td>
+        		<td class="td-manage">
+					<a title="编辑" href="{:U('CategoryManage/edit',array('id'=>$vo['Id']))}" class="btn button_btn bg-deep-blue">编辑分类</a>
+        		</td>
 			 </tr>	
        </volist>			
 		    </tbody>

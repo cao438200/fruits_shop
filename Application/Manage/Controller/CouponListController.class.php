@@ -21,10 +21,12 @@ class CouponListController extends Controller {
 
     public function add(){
     	$id=I('post.coupon_id');
-    	$data['less_price']=I('less_price');
-        $data['reduce_price']=I('reduce_price');
-        $data['valid_time']=I('valid_time');
-        $data['desc']=I('desc');
+    	$data['less_price']=I('post.less_price');
+        $data['reduce_price']=I('post.reduce_price');
+        $data['valid_time']=I('post.valid_time');
+        $data['start_time']=I('post.start_time');
+        $data['end_time']=I('post.end_time');
+        $data['desc']=I('post.desc');
     	$bool=M('coupons')->Where("Id=$id")->save($data);
     	if($bool){
     		$this->success('操作成功',__CONTROLLER__.'/index',1);
