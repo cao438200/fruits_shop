@@ -72,7 +72,7 @@ class AdministratorListController extends Controller {
     	];
     	$bool=$art->add($data); 
 	   	if($bool){
-	    	$this->success('操作成功',__CONTROLLER__.'/index',1);
+	    	$this->success('操作成功',__CONTROLLER__.'/index',2);
 	    }else{
 			$this->error('操作失败','',1);
 	   	}        

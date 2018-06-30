@@ -41,6 +41,98 @@ abstract class Controller {
         if(method_exists($this,'_initialize'))
             $this->_initialize();
     }
+
+    //获取两个经纬度之间的距离
+    function getDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $earthRadius = 6367000;    
+        $lat1 = ($lat1 * pi() ) / 180;
+        $lng1 = ($lng1 * pi() ) / 180;
+        $lat2 = ($lat2 * pi() ) / 180;
+        $lng2 = ($lng2 * pi() ) / 180;
+        $calcLongitude = $lng2 - $lng1;
+        $calcLatitude = $lat2 - $lat1;
+        $stepOne = pow(sin($calcLatitude / 2), 2) + cos($lat1) * cos($lat2) * pow(sin($calcLongitude / 2), 2);  
+        $stepTwo = 2 * asin(min(1, sqrt($stepOne)));
+        $calculatedDistance = $earthRadius * $stepTwo;
+        return round($calculatedDistance);
+    }
+    ////自定义函数,get访问url返回结果
+     function https_request($url)
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl,  CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $data = curl_exec($curl);
+        $data = json_decode($data, true);
+        if (curl_errno($curl)){
+            return 'ERROR'.curl_error($curl);
+        }
+        curl_close($curl);
+        return $data;
+    }
+
+    //获取微信的access_token;
+    public function get_access_token()  
+    {  
+        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx16eada8cf1729fc4&secret=594bbd9d07c61822df5f9b8935e875d9';
+        $token=M('access_token')->find();
+        if(!$token){
+            $jsoninfo =$this->https_request($url);
+            $map['access_token']=$jsoninfo['access_token'];
+            $map['expires_time']=$jsoninfo['expires_in']+time()-200;
+            M('access_token')->add($map);
+            return $jsoninfo['access_token'];
+        }else if($token['expires_in']<time()){
+            $jsoninfo =$this->https_request($url);
+            $map['access_token']=$jsoninfo['access_token'];
+            $map['expires_time']=$jsoninfo['expires_in']+time()-200;
+            $where['expires_time']=$token['expires_time'];
+            M('access_token')->Where($where)->save($map);//时间过期更新
+            return $jsoninfo['access_token'];
+        }else{
+            return $token['access_token'];
+        }   
+    }
+
+    //获取微信的jsapi_ticket
+    public function get_jsapi_ticket()  
+    {  
+
+        $accessToken=$this->get_access_token();
+        // 如果是企业号用以下 URL 获取 ticket
+        // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
+        $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
+        $ticket=M('jsapi_ticket')->find();
+        if(!$ticket){
+            $jsoninfo =$this->https_request($url);
+            $map['ticket']=$jsoninfo['ticket'];
+            $map['expires_time']=$jsoninfo['expires_in']+time()-200;
+            M('jsapi_ticket')->add($map);
+            return $jsoninfo['ticket'];
+        }else if($ticket['expires_in']<time()){
+            $jsoninfo =$this->https_request($url);
+            $map['ticket']=$jsoninfo['ticket'];
+            $map['expires_time']=$jsoninfo['expires_in']+time()-200;
+            $where['expires_time']=$ticket['expires_time'];
+            M('jsapi_ticket')->Where($where)->save($map);//时间过期更新
+            return $jsoninfo['ticket'];
+        }else{
+            return $ticket['ticket'];
+        }   
+    }
+
+    function createNonceStr($length = 16) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $str = "";
+        for ($i = 0; $i < $length; $i++) {
+          $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
+    }
+
     //获取两个时间的天数差
     function getDays ($day1, $day2){
       $second1 = strtotime($day1);
@@ -52,6 +144,7 @@ abstract class Controller {
       }
       return ($second1 - $second2) / 86400;
     }
+
     //调用接口方法
     public  function get_port($url,$data=''){
         $data=http_build_query($data);

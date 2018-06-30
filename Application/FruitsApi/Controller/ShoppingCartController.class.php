@@ -27,7 +27,13 @@ class ShoppingCartController extends Controller {
                 ->select();
                 $carts[$value['group_name']]=$cart;
             }
-       	 	$this->ajaxReturn($carts,'JSON');
+            if($cart){
+                $this->ajaxReturn($carts,'JSON');
+            }else{
+                $ts['data']=0;
+                $ts['msg']='购物车为空'；
+                $this->ajaxReturn($ts,'JSON');
+            }	 	
     	}  else{
     		$this->ajaxReturn($msg,'JSON');
     	}  
@@ -58,9 +64,11 @@ class ShoppingCartController extends Controller {
             );
             $bool=M('shopping_cart')->add($data);
             if($bool){
-                $ts['msg']='1';//添加成功
+                $ts['msg']='添加成功';//添加成功
+                $ts['data']='1';
             }else{
-                $ts['msg']='2';//添加失败
+                $ts['msg']='添加失败';//添加失败
+                $ts['data']='-1';
             }
             $this->ajaxReturn($ts,'JSON');
         }  else{
