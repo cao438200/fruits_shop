@@ -178,10 +178,6 @@ abstract class Controller {
         $m=date('m');//当前月
         $h=date('H');//当前时
         $i=date('i');//当前分
-        // $y='18';
-        // $m='06';
-        // $h='17';
-        // $i='59';
         if($i+5>59){
             $i=$i+5-60;
             $i='0'.$i;
@@ -190,7 +186,11 @@ abstract class Controller {
                 $h='0'.$h;
             }
         }
+        if(strlen($card)%2==1){
+            $card='0'.$card;
+        }
         $cards=$card.$y.$m.$h.$i;//第一步
+        // var_dump($cards);die;
         $cards=str_split($cards);//字符串转化数组
         $legth=count($cards);
         for($i=0; $i <$legth ; $i++) { //第二步数字替换

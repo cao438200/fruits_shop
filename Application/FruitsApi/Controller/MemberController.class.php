@@ -71,7 +71,7 @@ class MemberController extends Controller {
                 }else{
                     $msg=array('data'=>'-1','msg'=>'添加失败');//添加失败
                 }
-                $this->ajaxReturn($msg,'JSON'); 
+                $this->ajaxReturn($msg,'JSON');   
             }else{
                 $msg=array('error'=>'缺少参数');
                 $this->ajaxReturn($msg,'JSON'); 
@@ -212,6 +212,23 @@ class MemberController extends Controller {
             // var_dump($coupons);
             if($coupons){
                 $this->ajaxReturn($coupons,'JSON');
+            }else{
+                $msg=array('data'=>'0','msg'=>'没有数据');
+                $this->ajaxReturn($msg,'JSON');
+            }
+        }else{
+            $msg=array('error'=>'身份验证失败');
+            $this->ajaxReturn($msg,'JSON');
+        }
+    }
+
+    public function getCardID(){
+        $float=I('post.op');
+        $memberid=1;
+        if($float=='fruits_api_getCardID'){
+            $card=M('member')->field('sCardID')->Where("Id=$memberid")->find();
+            if($card){
+                $this->ajaxReturn($card,'JSON');
             }else{
                 $msg=array('data'=>'0','msg'=>'没有数据');
                 $this->ajaxReturn($msg,'JSON');

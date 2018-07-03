@@ -6,9 +6,24 @@ use Think\Controller;
 class CouponGetListController extends Controller {
 
     public function index(){
+         $list=M('member_coupons')
+            ->field('member_coupons.status,member_coupons.lq_time,coupons.valid_time')
+            ->join('coupons on member_coupons.coupons_id=coupons.id')
+            ->Where("member_coupons.status=1")
+            ->select();
+        foreach ($list as $key => $value) {//自动修改优惠券状态
+            $day1= date('Y-m-d H:i:s');
+            $day2=$value['lq_time'];
+            $days=$this->getDays($day1,$day2);//获取时间天数差
+            if($days>$value['valid_time']){//判断优惠券是否失效
+                $id=$value['Id'];
+                $save['status']=3;
+                M('member_coupons')->Where("Id=$id")->save($save);
+            }
+        }
     	$count=M('member_coupons')
     		->field('member.sVIPName,member.sIDCard,member_coupons.status,member_coupons.lq_time,coupons.type,coupons.desc,coupons.valid_time')
-    		->join('member on member_coupons.member_id=member.id')
+    		->join('member on member_coupons.memberid=member.id')
     		->join('coupons on member_coupons.coupons_id=coupons.id')
     		->order('member_coupons.lq_time')
     		->count();
@@ -16,22 +31,13 @@ class CouponGetListController extends Controller {
 	    $this->assign('page',$p->show());
 	    $list=M('member_coupons')
     		->field('member.sVIPName,member.sIDCard,member_coupons.Id,member_coupons.status,member_coupons.lq_time,coupons.type,coupons.desc,coupons.valid_time')
-    		->join('member on member_coupons.member_id=member.id')
+    		->join('member on member_coupons.memberid=member.id')
     		->join('coupons on member_coupons.coupons_id=coupons.id')
     		->order('member_coupons.lq_time')
     		->limit($p->firstRow.','.$p->listRows)
     		->select();
     	$this->assign('list',$list);
-    	foreach ($list as $key => $value) {//自动修改优惠券状态
-    		$day1= date('Y-m-d H:i:s');
-    		$day2=$value['lq_time'];
-    		$days=$this->getDays($day1,$day2);//获取时间天数差
-    		if($days>$value['valid_time']){//判断优惠券是否失效
-    			$id=$value['Id'];
-    			$save['status']=3;
-    			M('member_coupons')->Where("Id=$id")->save($save);
-    		}
-    	}
+
     	//新用户优惠券领取人数
     	$map1['status']=array('gt',0);
     	$map1['type']=array('eq',1);

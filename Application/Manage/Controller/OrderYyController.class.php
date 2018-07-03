@@ -66,7 +66,7 @@ class OrderYyController extends Controller {
     		}
     	}
     	$orderps_all=M('order')
-    	->field('member.sVIPName,order.code,order.createtime,order.paytime,order.useprice,order.yh_price,order.status,order.remark,order.zttime_start,order.Id,order.zttime_end')
+    	->field('member.sVIPName,order.code,order.createtime,order.paytime,order.useprice,order.yh_price,order.status,order.remark,order.Id,order.appointment_time')
     	->join('LEFT JOIN member on order.memberid=member.Id')
     	->Where($map)->order('order.createtime desc')
     	->select();
