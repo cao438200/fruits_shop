@@ -15,25 +15,33 @@ class MemberPayController extends Controller {
                 $memberid=1;
                 if($float=='fruits_api_pay'){
                 	$id=I('post.id');//订单id
-                        $zf_type=I('post.zf_type');//判断是余额支付还是微信支付1.微信支付2.余额支付
+                    $zf_type=I('post.zf_type');//判断是余额支付还是微信支付1.微信支付2.余额支付
                 	$order_type=I('post.type');//订单类型
                 	$appointment_time=I('post.appointment_time');//预约时间
                 	$price=I('post.price');//支付金额
-                        if($id && $zf_type && $order_type){
-                                if($zf_type==1){//微信支付
+                    if($id && $zf_type && $order_type){
+                            if($zf_type==1){//微信支付
 
-                                                
-                                }else if($zf_type==2){//余额支付
-                                        $balance=M('member')->field('balance')->Where("$id=$memberid")->find();
-                                        if($balance['balance']<$price){
-                                              $msg=array('flag'=>'0','msg'=>'余额不足');  
-                                        }else{
+                                            
+                            }else if($zf_type==2){//余额支付
+                                $balance=M('member')->field('balance')->Where("$id=$memberid")->find();
+                                if($balance['balance']<$price){
+                                    $msg=array('flag'=>'0','msg'=>'余额不足');  
+                                }else{
+                                    M()->startTrans();
+                                    $member_yr=$this->getIntegral($memberid,$price);
+                                    $map1=array(
+                                        're_integral'=>$member_yr['jf'],
+                                        'balance'=>$member_yr['ye'],
+                                    );
+                                    $bool1=M('member')->Where("Id=$memberid")->save($map1);//修改个人积分余额
+                                    $bool2=M('order')->Where("Id=$id")->save('status=1');
 
-                                        }
                                 }
-                        }else{
-                                $msg=array('error'=>'缺少参数');
-                        }
+                            }
+                    }else{
+                            $msg=array('error'=>'缺少参数');
+                    }
                 	
                 }else{
                 	$msg=array('error'=>'身份验证失败');

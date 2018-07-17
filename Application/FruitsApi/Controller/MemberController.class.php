@@ -318,9 +318,9 @@ class MemberController extends Controller {
         $memberid=1;
         if($float=='fruits_api_memberRegister'){
             $phone=I('post.phone');
-            $map['phone']=$phone;
+            $map['sMobile']=$phone;
             $bool=M('member')->Where("Id=$memberid")->save($map);
-            if($phone){
+            if($bool){
                 $msg=array('flag'=>1,'msg'=>'成功');
             }else{
                 $msg=array('flag'=>-1,'msg'=>'失败');
@@ -328,6 +328,7 @@ class MemberController extends Controller {
         }else{
             $msg=array('error'=>'身份验证失败');
         }
+        $this->ajaxReturn($msg,'JSON');
     }
 
     //用户注册

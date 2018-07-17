@@ -42,6 +42,33 @@ abstract class Controller {
             $this->_initialize();
     }
 
+    //会员消费积分
+    function getIntegral($id,$price){
+        $daym=intval(date('m',strtotime(date("Y-m-d"))));//当前月
+        $dayd=intval(date('d',strtotime(date("Y-m-d"))));//当前天
+        $integral1=M('integral')->field('multiple')->Where("type=1")->find();//平常积分倍数
+        $integral2=M('integral')->field('multiple')->Where("type=2")->find();//生日积分倍数
+        $integral3=M('integral')->field('multiple')->Where("type=3")->find();//会员日分倍数
+        $member_md=M('member')->field('iBirthMon,iBirthDayA,re_integral,balance')->Where("Id=$id")->find();//获取用户的生日
+        $iBirthMon=$member_md['iBirthMon'];
+        $iBirthDayA=$member_md['iBirthDayA'];
+        if($dayd==7){//会员日
+          if($iBirthMon==$daym && $iBirthDayA==$dayd){//生日
+              $num=$integral2['multiple']+$integral3['multiple'];
+          }else{
+              $num=$integral3['multiple'];
+          }
+        }else{
+          if($iBirthMon==$daym && $iBirthDayA==$dayd){//生日
+              $num=$integral2['multiple'];
+          }else{
+              $num=$integral1['multiple'];
+          }
+        }
+        $returnjf['jf']=$num*intval($price)+$member_md['re_integral'];
+        $returnjf['ye']=intval($member_md['banner'])-intval($price);
+        return $returnjf;
+    }
 
     //获取两个经纬度之间的距离
     function getDistance($lat1, $lng1, $lat2, $lng2)
