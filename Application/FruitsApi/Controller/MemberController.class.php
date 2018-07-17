@@ -19,7 +19,7 @@ class MemberController extends Controller {
         $msg=array('error'=>'身份验证失败');
         if($float=='fruits_api_myself'){
             $map['Id']=$memberid;
-            $member=M('member')->field('sHealImgURL,sWXName,sVIPName,balance,re_integral')->Where($map)->find();
+            $member=M('member')->field('sHealImgURL,sWXName,sVIPName,balance,re_integral,dBirthday,sMobile')->Where($map)->find();
             $this->ajaxReturn($member,'JSON');
         } else{
             $this->ajaxReturn($msg,'JSON');
@@ -311,6 +311,25 @@ class MemberController extends Controller {
         $this->ajaxReturn($msg,'JSON');
     }
 
+    //修改手机号
+    //
+    public function alertPhone(){
+        $float=I('post.op');
+        $memberid=1;
+        if($float=='fruits_api_memberRegister'){
+            $phone=I('post.phone');
+            $map['phone']=$phone;
+            $bool=M('member')->Where("Id=$memberid")->save($map);
+            if($phone){
+                $msg=array('flag'=>1,'msg'=>'成功');
+            }else{
+                $msg=array('flag'=>-1,'msg'=>'失败');
+            }
+        }else{
+            $msg=array('error'=>'身份验证失败');
+        }
+    }
+
     //用户注册
     public function memberRegister(){
         $float=I('post.op');
@@ -329,6 +348,7 @@ class MemberController extends Controller {
                         'sWXOpenID'=>'',
                     );
                     $member=$this->get_port($url,$data);//获取用户线下信息
+
                     if($member){//线下有用户信息
                         $birthday=$member['生日'];
                         $iBirthMon=date('m',strtotime($birthday));
@@ -367,9 +387,10 @@ class MemberController extends Controller {
                         }
                     }else{//线下无用户信息
                         $storeid=$_SESSION['storeid'];
-                        $store=M('store')->field('store_num')->Where('Id=$storeid')->find();
+                        $store=M('store')->field('store_num')->Where("Id=$storeid")->find();
                         $iBirthMon=date('m',strtotime($birthday));
                         $iBirthDayA=date('d',strtotime($birthday));
+                        // $this->ajaxReturn(0,'JSON');
                         $url='http://124.225.146.25:3003/crm.asmx/Get_CardIDByAdd';
                         $cardID=$this->get_port($url);//获取用户有效卡号
                         $map=array(

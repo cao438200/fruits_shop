@@ -146,8 +146,8 @@ class IndexController extends Controller {
     }
 
     public function jl(){
-        echo $this->getDistance(30.526522,114.355638, 30.526518, 114.356184);
-        // echo date("Y-m-d");
+        //echo $this->getDistance(30.526522,114.355638, 30.526518, 114.356184);
+        echo $iBirthMon=date('m',strtotime('2017-11-5'));
         // // echo $this->getPsFree(4,15);
         // echo date('Y-m-d',strtotime("2018-07-12 +20 day"));
     }

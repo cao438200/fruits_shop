@@ -5,10 +5,12 @@ class WelcomeController extends Controller {
     public function index(){
        // $url='http://124.225.146.25:3003/crm.asmx/Get_CardIDByAdd';
        //                echo   $cardID=$this->get_port($url);die;
-    	$url='http://www.fruits.com/index.php/FruitsApi/Member/myAddress';
+    	$url='http://www.fruits.com/index.php/FruitsApi/Member/memberRegister';
   		$data=array(
-  			'op'=>'fruits_api_myAddress',
-       
+  			'op'=>'fruits_api_memberRegister',
+        'phone'=>'15712364561',
+        'birthday'=>'2010-11-12',
+        'sVIPName'=>'储层0',
   		);
   		$curl = curl_init();
           curl_setopt($curl, CURLOPT_URL, $url);
