@@ -34,7 +34,7 @@ class IndexController extends Controller {
             echo "<script>alert('用户名或密码错误');history.go(-1);</script>";
             die;
         }else{
-            session_start;
+            session_start();
             $_SESSION['administrator']=$name;
             redirect(__MODULE__.'/Welcome/index');
         }

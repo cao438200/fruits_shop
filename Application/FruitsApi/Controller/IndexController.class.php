@@ -27,7 +27,7 @@ class IndexController extends Controller {
     	$msg=array('error'=>'身份验证失败');
     	if($float=='fruits_api_goods'){
     		$map['status']=1;
-    		$goods=M('commodity')->field('Id,comdName,img_src,retailPrice,tradePrice')->Where($map)->order('encode desc')->limit(0,6)->select();
+    		$goods=M('commodity')->field('Id,comdName,src,retailPrice,tradePrice,title1,title2,discount')->Where($map)->order('sysNum desc')->limit(0,6)->select();
     		$this->ajaxReturn($goods,'JSON');
     	}else{
     		$this->ajaxReturn($msg,'JSON');
@@ -85,10 +85,11 @@ class IndexController extends Controller {
                     $id=$value['Id'];
                     $latitude1=$value['latitude'];
                     $longitude1=$value['longitude'];
-                    $len=$this->getDistance($latitude1, $longitude1, $latitude, $longitude);//计算两个坐标的距离
+                    $len=$this->getDistance($latitude1, $longitude1,$latitude,$longitude);//计算两个坐标的距离
                     $stores[$id]=$len;
                 }
                 asort($stores);
+                // var_dump($stores);die;
                 $i=0;
                 foreach ($stores as $key => $value) {
                         $ids[$i]=$key;
@@ -96,6 +97,8 @@ class IndexController extends Controller {
                 }
                 $storeid=$ids[0];
                 $data=M('store')->field('Id,name')->Where("Id=$storeid")->find();
+                session_start();
+                $_SESSION['storeid']=$storeid;//储层当前店铺id
                 $this->ajaxReturn($data,'JSON'); 
             }else{
                 $msg=array('error'=>'经纬度获取失败');
@@ -132,11 +135,9 @@ class IndexController extends Controller {
                 $data[1]=M('coupons')->Where('type=1')->find();
             } 
             if($data){
-                $this->ajaxReturn($data,'JSON');
+                $this->ajaxReturn(1,'JSON');
             }else{
-                $ts['data']=0;
-                $ts['msg']='没有数据';
-                $this->ajaxReturn($ts,'JSON');
+                $this->ajaxReturn(0,'JSON');
             }
         }else{
             $msg=array('error'=>'身份验证失败');
@@ -145,11 +146,14 @@ class IndexController extends Controller {
     }
 
     public function jl(){
-        echo $this->getDistance(30.526310,114.455520, 30.526310, 114.455523);
+        echo $this->getDistance(30.526522,114.355638, 30.526518, 114.356184);
+        // echo date("Y-m-d");
+        // // echo $this->getPsFree(4,15);
+        // echo date('Y-m-d',strtotime("2018-07-12 +20 day"));
     }
 
     public function BarCode(){
         $barcode = new \Org\Util\BarCode('1305 4413 8579 408522');
-        $barcode->createBarCode();
+        $barcode->createBarCode($image_type ='png');
     }
 }

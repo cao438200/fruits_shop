@@ -27,7 +27,7 @@ class CouponGetListController extends Controller {
     		->join('coupons on member_coupons.coupons_id=coupons.id')
     		->order('member_coupons.lq_time')
     		->count();
-    	$p = getpage($count,1);//分页
+    	$p = getpage($count,10);//分页
 	    $this->assign('page',$p->show());
 	    $list=M('member_coupons')
     		->field('member.sVIPName,member.sIDCard,member_coupons.Id,member_coupons.status,member_coupons.lq_time,coupons.type,coupons.desc,coupons.valid_time')

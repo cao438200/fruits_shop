@@ -42,6 +42,7 @@ abstract class Controller {
             $this->_initialize();
     }
 
+
     //获取两个经纬度之间的距离
     function getDistance($lat1, $lng1, $lat2, $lng2)
     {
@@ -57,6 +58,51 @@ abstract class Controller {
         $calculatedDistance = $earthRadius * $stepTwo;
         return round($calculatedDistance);
     }
+
+    //获取订单配送费
+    function getPsFree($len,$weight){
+        $free=5.3;
+        $d=date("Y-m-d");
+        $d0=strtotime(date('Y-m-d H:i'));
+        $d1=strtotime("$d 11:00");//午高峰
+        $d2=strtotime("$d 12:59");
+        $d3=strtotime("$d 21:00");//晚高峰
+        $d4=strtotime("$d 23:59");
+        $d5=strtotime("$d 00:00");
+        $d6=strtotime("$d 05:59");
+        if($d1<$d0 && $d0<$d2){
+            $free=$free+2;//午高峰
+        };
+        if($d3<$d0 && $d0<$d4){
+            $free=$free+2;//晚高峰
+        };
+        if($d5<$d0 && $d0<$d6){
+            $free=$free+2;//晚高峰
+        };
+
+        //距离收费
+        if(1<$len && $len<=3){
+            $free=1*($len-1)+$free;
+        }else if(3<$len && $len<=5){
+            $free=2+2*($len-3)+$free;
+        }else if(5<$len && $len<=7){
+            $free=6+3*($len-5)+$free;
+        }else if(7<$len && $len<=10){
+            $free=12+5*($len-7)+$free;
+        }
+
+        //重量收费
+        if(5<$weight && $weight<=10){
+            $free=0.5*($weight-5)+$free;
+        }else if(10<$weight && $weight<=20){
+            $free=2.5+1*($weight-10)+$free;
+        }else if(10<$weight && $weight<=20){
+            $free=12.5+2*($weight-20)+$free;
+        }
+
+        return $free;
+    }
+    
     ////自定义函数,get访问url返回结果
      function https_request($url)
     {
@@ -77,7 +123,7 @@ abstract class Controller {
     //获取微信的access_token;
     public function get_access_token()  
     {  
-        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx16eada8cf1729fc4&secret=594bbd9d07c61822df5f9b8935e875d9';
+        $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx25b01b557045ea0a&secret=bb8e78a44d4e6dc236301cc6cf8b7635';
         $token=M('access_token')->find();
         if(!$token){
             $jsoninfo =$this->https_request($url);
@@ -124,6 +170,7 @@ abstract class Controller {
         }   
     }
 
+    //随机字符串
     function createNonceStr($length = 16) {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         $str = "";
@@ -131,6 +178,82 @@ abstract class Controller {
           $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
         }
         return $str;
+    }
+
+    //字符串字典顺序排序
+    public function bigger($s1, $s2) {
+        $length1 = strlen($s1);
+        $length2 = strlen($s2);
+        $i = 0;
+        while ($i < $length1 && $i < $length2) {
+            if ($s1[$i] > $s2[$i]) {
+                return true;
+            } else if ($s1[$i] < $s2[$i]) {
+                return false;
+            } else {
+                $i++;
+            }
+        }
+        if ($i == $length1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    //美团签名算法
+    public  function sign_mt($data)
+    { 
+        $length=count($data); $k=0;
+        foreach ($data as $key => $value) {//取出数组键值组成数组
+            $keys[$k]=$key;
+            $k++;
+        }
+        for ( $i = 0; $i < $length-1; $i++) {//冒泡排序
+            for ($j = 0; $j < $length-1-$i; $j++) {
+                $flag=$this->bigger($keys[$j], $keys[$j + 1]);
+                if ($flag) {
+                    $tmp = $keys[$j];
+                    $keys[$j] = $keys[$j + 1];
+                    $keys[$j + 1] = $tmp;
+                }
+            }
+        }
+        foreach ($keys as $key => $value) {//根据排序后的键值得到排序后的数组
+            $datas[$value]=$data[$value];
+        }
+        foreach ($datas as $key => $value) {//以参数参数值拼接得到加密前参数
+            if(strlen($value)>0){
+                $strs .="$key"."$value";
+            }
+        }
+        $str=sha1("j}S,5,2q.]X:9oCg5J.?p*[X:8>e6c}z56tN)/ePiE5}96HPd(k%9<i8P[1x@tOG"."$strs");//secret + 排序后的参数sha1加密
+        return $str;
+    }
+
+    //访问美团接口
+    
+    public function get_mt_prot($url,$data){
+        $sign=$this->sign_mt($data);//获取美团签名
+        $data['sign']=$sign;
+        $curl = curl_init(); // 启动一个CURL会话
+        curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1); // 从证书中检查SSL加密算法是否存在
+        curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']); // 模拟用户使用的浏览器
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1); // 使用自动跳转
+        curl_setopt($curl, CURLOPT_AUTOREFERER, 1); // 自动设置Referer
+        curl_setopt($curl, CURLOPT_POST, 1); // 发送一个常规的Post请求
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data); // Post提交的数据包
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30); // 设置超时限制防止死循环
+        curl_setopt($curl, CURLOPT_HEADER, 0); // 显示返回的Header区域内容
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // 获取的信息以文件流的形式返回
+        $result = curl_exec($curl);
+        if (curl_errno($curl)) {
+            echo 'Errno'.curl_error($curl);//捕抓异常
+        }
+        curl_close($curl);
+        $result=json_decode($result,true);
+        return $result;
     }
 
     //获取两个时间的天数差
@@ -145,7 +268,7 @@ abstract class Controller {
       return ($second1 - $second2) / 86400;
     }
 
-    //调用接口方法
+    //调用线下接口方法
     public  function get_port($url,$data=''){
         $data=http_build_query($data);
         $curl = curl_init();
@@ -167,6 +290,17 @@ abstract class Controller {
         $data=array(
             'sUserID'=>'admin',
             'sPassword'=>'123456',
+            'sExportType'=>'JSON',
+            'sCharsetName'=>'UTF-8',
+        );
+        return $this->get_port($url,$data);
+    }
+
+    public function get_logion(){ 
+        $url="http://124.225.146.25:3003/crm.asmx/ABC_Login";
+        $data=array(
+            'sUserID'=>'admin',
+            'sPassword'=>'rq2d3333',
             'sExportType'=>'JSON',
             'sCharsetName'=>'UTF-8',
         );

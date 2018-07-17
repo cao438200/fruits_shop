@@ -68,10 +68,17 @@ class OrderZtController extends Controller {
     			$map['order.status']=array('eq',4);//退款订单
     		}
     	}
+        $count=M('order')
+        ->join('LEFT JOIN member on order.memberid=member.Id')
+        ->Where($map)
+        ->count();
+        $p = getpage($count,10);//分页
+        $this->assign('page',$p->show());
     	$orderps_all=M('order')
     	->field('member.sVIPName,order.code,order.createtime,order.paytime,order.useprice,order.yh_price,order.status,order.remark,order.endtime,order.Id')
     	->join('LEFT JOIN member on order.memberid=member.Id')
     	->Where($map)->order('order.createtime desc')
+        ->limit($p->firstRow.','.$p->listRows)
     	->select();
     	$this->assign('orderps_all',$orderps_all);
     	$this->assign('op',$op);

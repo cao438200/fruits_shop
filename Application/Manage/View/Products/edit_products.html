@@ -92,11 +92,13 @@
     <ul>
   <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>商品名称：&nbsp;&nbsp;</label>
   <div class="Add_content col-xs-11"><input name="name" type="text"  class="col-xs-4" readonly="readonly" value="{$products.comdName}" /></div>  </li>
+  <notempty name="menus">
   <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>选择菜谱：&nbsp;&nbsp;</label>
   <volist name="menus" id="vo">
     <div class="Add_content" style="padding-right:7px;"><input name="menu[]" type="checkbox" value={$vo.Id} <if condition="$vo.flag eq 1"> checked="checked" </if> />{$vo.name}</div>
   </volist>
   </li>
+  </notempty>
      <li class="clearfix">
      <label class="label_name col-xs-1"><i class="c-red">*</i>商品图片：&nbsp;&nbsp;</label>
    <div class="Add_content col-xs-11">
@@ -111,6 +113,18 @@
   </div>
      <div class="col-4"> <span class="Validform_checktip"></span></div>
      </li>
+      <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>商品简介1：&nbsp;&nbsp;</label>
+  <div class="Add_content col-xs-11"><input name="title1" type="text"  class="col-xs-4"  value="{$products.title1}" /></div>  </li>
+   <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>商品简介2：&nbsp;&nbsp;</label>
+  <div class="Add_content col-xs-11"><input name="title2" type="text"  class="col-xs-4"  value="{$products.title2}" /></div>  </li>
+  <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>商品折扣：&nbsp;&nbsp;</label>
+  <div class="Add_content col-xs-11"><input name="discount" type="text"  class="col-xs-4" placeholder="默认10不打折" value="{$products.discount}" /></div>  </li>
+  <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>储层方式：&nbsp;&nbsp;</label>
+  <div class="Add_content col-xs-11"><input name="reservoir" type="text"  class="col-xs-4"  value="{$products.reservoir}" /></div>  </li>
+  <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>商品级别：&nbsp;&nbsp;</label>
+  <div class="Add_content col-xs-11"><input name="rank" type="text"  class="col-xs-4"  value="{$products.rank}" /></div>  </li>
+  <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>商品重量：&nbsp;&nbsp;</label>
+  <div class="Add_content col-xs-11"><input name="weight" type="number"  class="col-xs-4"  value="{$products.weight}" /><span class="xzbtn" style="margin-top:-1px;margin-left:-475px;height:30px;width:35px;line-height:30px;">kg</span></div></li>
       <li class="clearfix"><label class="label_name col-xs-1"><i>*</i>商品详情：&nbsp;&nbsp;</label>
         <div class="field">
           <script>

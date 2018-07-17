@@ -30,7 +30,7 @@ class GoodClassController extends Controller {
     	if($float=='fruits_api_classGoods'){
             $map['groupid']=$classid;
             $map['status']=1;
-    		$goods=M('commodity')->field('Id,comdName,img_src,retailPrice,tradePrice')->Where($map)->order('encode desc')->select();
+    		$goods=M('commodity')->field('Id,comdName,img_src,src,retailPrice,tradePrice')->Where($map)->order('sysNum desc')->select();
        	 	$this->ajaxReturn($goods,'JSON');
     	}  else{
     		$this->ajaxReturn($msg,'JSON');

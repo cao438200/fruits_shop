@@ -46,7 +46,7 @@ class MenuListController extends Controller {
     //添加
     public function add(){
     	$name=I('post.name');
-    	$content=I('post.content');
+    	$content=stripslashes($_POST['content']);//菜单详情
 		$time=date('Y-m-d H:i:s');
 		$menu_main=I('post.menu_main');
 		$se_minor=I('post.se_minor');
@@ -75,7 +75,7 @@ class MenuListController extends Controller {
 	//菜单修改
     public function change_menu(){
     	$name=I('post.name');
-    	$content=I('post.content');
+    	$content=stripslashes($_POST['content']);//菜单详情
 		$menu_main=I('post.menu_main');
         $se_minor=I('post.se_minor');
         $first_minor=I('post.first_minor');

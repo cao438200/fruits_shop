@@ -26,34 +26,36 @@ class BannerListController extends Controller {
             $data['sort']=I('post.px');
             $photo=isset($_FILES['img'])?$_FILES['img']:'';
 
-            $upload = new \Think\Upload();// 实例化上传类    
+            if($photo['name']){
+                $upload = new \Think\Upload();// 实例化上传类    
 
-            $upload->maxSize   = 10*1024*1024 ;// 设置附件上传大小    
+                $upload->maxSize   = 10*1024*1024 ;// 设置附件上传大小    
 
-            $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+                $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
 
-            $upload->rootPath  =      'Public/Uploads/'; // 设置附件上传目录    // 上传单个文件     
+                $upload->rootPath  =      'Public/Uploads/'; // 设置附件上传目录    // 上传单个文件     
 
-            $info   =   $upload->uploadOne($photo);    // 上传错误提示错误信息  
+                $info   =   $upload->uploadOne($photo);    // 上传错误提示错误信息  
 
-            if(!$info) {      
+                if(!$info) {      
 
-                $this->error($upload->getError());
+                    $this->error($upload->getError());
 
-            }else{// 上传成功 获取上传文件信息     
+                }else{// 上传成功 获取上传文件信息     
 
-                $data['src']=$info['savepath'].$info['savename'];
-                $bool=M('banner')->Where("Id=$id")->save($data); 
-                if($bool){
-                    $this->success('操作成功',__CONTROLLER__.'/index',1);
-                }else{
+                    $data['src']=$info['savepath'].$info['savename'];
+                    $data['url']='http://'.$_SERVER['HTTP_HOST'].'/Public/Uploads/'.$info['savepath'].$info['savename'];
+                    
+                }
+            }
+            $bool=M('banner')->Where("Id=$id")->save($data); 
+            if($bool){
+                $this->success('操作成功',__CONTROLLER__.'/index',1);
+            }else{
 
                     $this->error('操作失败','',1);
 
-                }
-
             }
-
         }else{
             $id=I('get.id');
             $banner=M('banner')->Where("Id=$id")->find();
@@ -118,6 +120,7 @@ class BannerListController extends Controller {
 	      }else{// 上传成功 获取上传文件信息     
 
 		      $data['src']=$info['savepath'].$info['savename'];
+              $data['url']='http://'.$_SERVER['HTTP_HOST'].'/Public/Uploads/'.$info['savepath'].$info['savename'];
 
 		      $data['createtime']=date('Y-m-d H:i:s');
 
